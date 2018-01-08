@@ -103,7 +103,7 @@ with open("code.txt") as f:
 				if len(line) == 1:
 					LC = 0
 				else:
-					LC = int(line[1])
+					LC = int(line[1]) - 1
 
 		#To avoid index out of range.
 		if len(line) == 3:
@@ -113,7 +113,7 @@ with open("code.txt") as f:
 				SYMBOL_TABLE[line[0]] = LC
 				
 		if line[0] == 'ORIGIN':
-			LC = int(line[1])
+			LC = int(line[1]) - 1
 
 
 print("\n\nSYMBOL_TABLE = ", SYMBOL_TABLE)
