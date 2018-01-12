@@ -1,3 +1,5 @@
+import json
+
 MNT = {}
 PTAB = {}
 MDT = {}
@@ -24,11 +26,12 @@ with open("code") as f:
 			param = []
 			for i in line:
 				if i[0] == '&':
-					param.append(i)
+					param.append(i.strip(','))
 
 			MNT[MacName] = {'#PP' : len(param), '#KP' : 0}
 
-			PTAB[MacName] = [i.strip(',') for i in param]
+			PTAB[MacName] = []
+			PTAB[MacName].append([i.strip(',') for i in param])
 
 			MACF = 0
 
@@ -42,22 +45,38 @@ with open("code") as f:
 		if line[0] in MNT:
 			MacName = line[0]
 			param = line[1].split(',')
+			PTAB[MacName].append(param)
 			
 			
 			for L in MDT[MacName]:
+				Pass1 = []
+				Pass2 = []
 				for i in range(len(L)):
 					if L[i][0] == '&' :
 						
-						L[i] = 'P'+str(PTAB[MacName].index(L[i]))
+						I = PTAB[MacName][0].index(L[i])
+						Pass2.append(PTAB[MacName][1][I])
+						L[i] = 'P'+str(PTAB[MacName][0].index(L[i]))
+						
+					else:
+						Pass2.append(L[i])
 
-				print()
+					Pass1.append(L[i])
+					
 
-			IC = []
+				print(*Pass1, sep='\t', end="")
+				print("\t", *Pass2, sep='\t')
+
+			print("\n")
+
+			print(MDT[MacName])
+
+			
 
 
 			print("\nparam = ", param)
 
 				
-print("MNT = ", MNT)
-print("PTAB = ", PTAB)
-print("MDT = ", MDT)
+print("MNT = ", json.dumps(MNT ,sort_keys=True, indent=4))
+print("PTAB = ", json.dumps(PTAB,sort_keys=True, indent=4))
+print("MDT = ", json.dumps(MDT,sort_keys=True, indent=4))
