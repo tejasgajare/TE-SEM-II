@@ -28,7 +28,7 @@ with open("code") as f:
 
 			MNT[MacName] = {'#PP' : len(param), '#KP' : 0}
 
-			PTAB[MacName] = [i for i in param]
+			PTAB[MacName] = [i.strip(',') for i in param]
 
 			MACF = 0
 
@@ -43,11 +43,16 @@ with open("code") as f:
 			MacName = line[0]
 			param = line[1].split(',')
 			
-			IC = []
+			
 			for L in MDT[MacName]:
-				for i in L:
-					
+				for i in range(len(L)):
+					if L[i][0] == '&' :
+						
+						L[i] = 'P'+str(PTAB[MacName].index(L[i]))
 
+				print()
+
+			IC = []
 
 
 			print("\nparam = ", param)
