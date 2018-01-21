@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+body{
+	margin : 0;
+}
+
+
+header, footer {
+	width : 100%;
+	background-color : gray;
+	color : white;
+	font-size : 20px;
+	text-align : center;
+	padding : 20px 20px;
+}
+
+.navigation {
+	position: fixed;
+	width : 100%;
+	background-color : black;
+	padding : 20px;
+}
+
+.navigation a{
+	color : white;
+	text-align : centre;
+	padding : 20px 20px;
+	font-size : 20px;
+	text-decoration : none;
+}
+
+.navigation header{
+	
+}
+
+.navigation a:hover{
+	background-color : #cc0000;
+	color : black;
+}
