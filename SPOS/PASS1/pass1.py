@@ -39,8 +39,8 @@ DECLARATIVES = {
 	"DC" : 'NULL'
 }
 
-#Dyanamic Tables
-SYMBOL_TABLE = {}
+#Dynamic Tables
+SYMBOL_TABLE = [[],[]]
 LITERAL_TABLE = {}
 
 
@@ -63,24 +63,26 @@ def CHECK(word):
 
 	else:
 		#If present return
-		if word in SYMBOL_TABLE:
-			return SYMBOL_TABLE[word]
+		if word in SYMBOL_TABLE[0]:
+			idx  = SYMBOL_TABLE[0].index(word)
+			return SYMBOL_TABLE[1][idx]
 		else:
-			SYMBOL_TABLE[word] = "S"+str((len(SYMBOL_TABLE)+1))
-			return SYMBOL_TABLE[word]
+			SYMBOL_TABLE[0].append(word)
+			SYMBOL_TABLE[1].append("S"+str((len(SYMBOL_TABLE[0])+1)))
+			return SYMBOL_TABLE[1][-1]
 
 LC = 000
-with open("code.txt") as f:
+with open("code.txt") as f, open("output.txt", "w+") as out:
 	for line in f:
 		line = line.strip('\n').split(' ')
 		IC  = ["" for _ in range(len(line))]
 		
-		print("\n   ",*line, sep='\t')
+		#print("\n   ",*line, sep='\t')
 
 		#If first word is a LABEL
 		if line[0][-1] == ':' :
-			LC += 1
-			SYMBOL_TABLE[line[0][:-1]] = LC
+			SYMBOL_TABLE[0].append(line[0][:-1])
+			SYMBOL_TABLE[1].append(LC)
 			line.pop(0)
 
 
@@ -95,7 +97,9 @@ with open("code.txt") as f:
 					IC[2] = CHECK(line[2])
 
 			IC.insert(0,LC)
-			print(*IC, sep='\t')
+			#print(*IC, sep='\t')
+			print(*IC, sep='\t', file = out)
+
 
 		#Else if Assembler Directive
 		elif line[0] in ASSEMBLER_DIR:
@@ -110,12 +114,17 @@ with open("code.txt") as f:
 			#For declartive Statements
 			if line[1] in DECLARATIVES:
 				LC+=1
-				SYMBOL_TABLE[line[0]] = LC
+				if line[0] in SYMBOL_TABLE[0]:
+					idx = SYMBOL_TABLE[0].index(line[0])
+					SYMBOL_TABLE[1][idx] = LC
+				else:
+					SYMBOL_TABLE[0].append(line[0])
+					SYMBOL_TABLE[1].append(0)
 				
 		if line[0] == 'ORIGIN':
 			LC = int(line[1]) - 1
 
 
-print("\n\nSYMBOL_TABLE = ", SYMBOL_TABLE)
-print("LITERAL_TABLE = ", LITERAL_TABLE)
-print("LC = ", LC)
+# print("\n\nSYMBOL_TABLE = ", SYMBOL_TABLE)
+# print("LITERAL_TABLE = ", LITERAL_TABLE)
+# print("LC = ", LC)
