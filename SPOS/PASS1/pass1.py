@@ -72,12 +72,17 @@ def CHECK(word):
 			return SYMBOL_TABLE[1][-1]
 
 LC = 000
-with open("code.txt") as f, open("output.txt", "w+") as out:
+with open("code.txt") as f, open(".output1.txt", "w+") as out:
 	for line in f:
 		line = line.strip('\n').split(' ')
 		IC  = ["" for _ in range(len(line))]
 		
-		#print("\n   ",*line, sep='\t')
+		# if line[0][-1] == ':' :
+		# 	print()
+		# 	print(*line, sep='\t')
+		# else:
+		# 	print("\n   ",*line, sep='\t')
+
 
 		#If first word is a LABEL
 		if line[0][-1] == ':' :
@@ -119,7 +124,7 @@ with open("code.txt") as f, open("output.txt", "w+") as out:
 					SYMBOL_TABLE[1][idx] = LC
 				else:
 					SYMBOL_TABLE[0].append(line[0])
-					SYMBOL_TABLE[1].append(0)
+					SYMBOL_TABLE[1].append(LC)
 				
 		if line[0] == 'ORIGIN':
 			LC = int(line[1]) - 1
