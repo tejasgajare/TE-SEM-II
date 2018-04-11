@@ -77,6 +77,6 @@ with open("code") as f:
 			print("\nparam = ", param)
 
 				
-print("MNT = ", json.dumps(MNT ,sort_keys=True, indent=4))
-print("PTAB = ", json.dumps(PTAB,sort_keys=True, indent=4))
-print("MDT = ", json.dumps(MDT,sort_keys=True, indent=4))
+print("MNT = ", MNT)
+print("PTAB = ", PTAB)
+print("MDT = ", MDT)

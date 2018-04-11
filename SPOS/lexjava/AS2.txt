@@ -1,0 +1,173 @@
+as.l:
+%{
+	#include<stdio.h>
+	
+%}
+
+%%
+"class"|"public"|"static"|"void"|"main"|"int"|"char" {printf("%s\t%s\n",yytext,"keyword");}
+[_a-zA-Z][a-zA-Z_0-9]*		{printf("%s\t%s\n",yytext,"Identifier");}
+[-+*/=] 			{printf("%s\t%s\n",yytext,"Operator");}
+[ \t\n] 			{printf("%s\t%s\n",yytext,"WhiteSpace");}
+,|; 				{printf("%s\t%s\n",yytext,"Delimeter");}
+[0-9]+   			{printf("%s\t%s\n",yytext,"Numbers");}
+["][^"\n]*["]			{printf("%s\t%s\n",yytext,"String constant");}
+'.'				{printf("%s\t%s\n",yytext,"Char constant");}
+"("|"{"|"}"|")"|"["|"]"  	{printf("%s\t%s\n",yytext,"Bracket");}
+"." 				{printf("%s\t%s\n",yytext,"Dot");}
+"//".*				{printf("%s\t%s\n",yytext,"Single line Comment");}
+"/*"[a-zA-z0-9 \n]+"*/"		{printf("%s\t%s\n",yytext,"Multiple line Comment");}
+.  				{printf("%s\t%s\n",yytext,"Lexical error");}
+%%
+
+void main()
+{
+	FILE *fp;
+	fp=fopen("Sample.java","r");
+	if(fp==NULL)
+	{
+		printf("ERROR");
+	}
+	else
+	{
+		yyin=fp;
+	}
+	yylex();
+	
+}
+
+..........................................................................
+Sample.java
+class Sample   //class name
+{
+/*
+*/
+int sum=" ";
+int sum="D";
+int sum="PCCOE";
+int sum="123";
+int sum="pcp;
+char ch=''p;
+public static void main(String args[]) //
+{
+System.out.println("Hello"); //print hello
+}
+}
+/*End of program*/
+............................................................................
+Output:
+pccoe@ubuntu:~$ lex as2.l
+pccoe@ubuntu:~$ gcc lex.yy.c -ll
+pccoe@ubuntu:~$ ./a.out
+class	keyword
+ 	WhiteSpace
+Sample	Identifier
+ 	WhiteSpace
+ 	WhiteSpace
+ 	WhiteSpace
+//class name	Single line Comment
+
+	WhiteSpace
+{	Bracket
+
+	WhiteSpace
+/*
+*/	Multiple line Comment
+
+	WhiteSpace
+int	keyword
+ 	WhiteSpace
+sum	Identifier
+=	Operator
+" "	String constant
+;	Delimeter
+
+	WhiteSpace
+int	keyword
+ 	WhiteSpace
+sum	Identifier
+=	Operator
+"D"	String constant
+;	Delimeter
+
+	WhiteSpace
+int	keyword
+ 	WhiteSpace
+sum	Identifier
+=	Operator
+"PCCOE"	String constant
+;	Delimeter
+
+	WhiteSpace
+int	keyword
+ 	WhiteSpace
+sum	Identifier
+=	Operator
+"123"	String constant
+;	Delimeter
+
+	WhiteSpace
+int	keyword
+ 	WhiteSpace
+sum	Identifier
+=	Operator
+"	Lexical error
+pcp	Identifier
+;	Delimeter
+
+	WhiteSpace
+char	keyword
+ 	WhiteSpace
+ch	Identifier
+=	Operator
+'	Lexical error
+'	Lexical error
+p	Identifier
+;	Delimeter
+
+	WhiteSpace
+public	keyword
+ 	WhiteSpace
+static	keyword
+ 	WhiteSpace
+void	keyword
+ 	WhiteSpace
+main	keyword
+(	Bracket
+String	Identifier
+ 	WhiteSpace
+args	Identifier
+[	Bracket
+]	Bracket
+)	Bracket
+ 	WhiteSpace
+//	Single line Comment
+
+	WhiteSpace
+{	Bracket
+
+	WhiteSpace
+System	Identifier
+.	Dot
+out	Identifier
+.	Dot
+println	Identifier
+(	Bracket
+"Hello"	String constant
+)	Bracket
+;	Delimeter
+ 	WhiteSpace
+//print hello	Single line Comment
+
+	WhiteSpace
+}	Bracket
+
+	WhiteSpace
+}	Bracket
+/*End of program*/	Multiple line Comment
+
+	WhiteSpace
+
+	WhiteSpace
+pccoe@ubuntu:~$ 
+

@@ -50,7 +50,7 @@ def CHECK(word):
 	'''
 	if word in REGISTER_TABLE:
 		return REGISTER_TABLE[word]
-			
+
 	elif word in CONDITIONALS:
 		return CONDITIONALS[word]
 
@@ -76,12 +76,12 @@ with open("code.txt") as f, open(".output1.txt", "w+") as out:
 	for line in f:
 		line = line.strip('\n').split(' ')
 		IC  = ["" for _ in range(len(line))]
-		
-		# if line[0][-1] == ':' :
-		# 	print()
-		# 	print(*line, sep='\t')
-		# else:
-		# 	print("\n   ",*line, sep='\t')
+
+		if line[0][-1] == ':' :
+			print()
+			print(*line, sep='\t')
+		else:
+			print("\n   ",*line, sep='\t')
 
 
 		#If first word is a LABEL
@@ -89,7 +89,8 @@ with open("code.txt") as f, open(".output1.txt", "w+") as out:
 			SYMBOL_TABLE[0].append(line[0][:-1])
 			SYMBOL_TABLE[1].append(LC)
 			line.pop(0)
-
+		
+		
 
 		#If first word is an opcode
 		if line[0] in OPCODE_TABLE:
@@ -102,7 +103,7 @@ with open("code.txt") as f, open(".output1.txt", "w+") as out:
 					IC[2] = CHECK(line[2])
 
 			IC.insert(0,LC)
-			#print(*IC, sep='\t')
+			print(*IC, sep='\t')
 			print(*IC, sep='\t', file = out)
 
 
@@ -114,6 +115,7 @@ with open("code.txt") as f, open(".output1.txt", "w+") as out:
 				else:
 					LC = int(line[1]) - 1
 
+
 		#To avoid index out of range.
 		if len(line) == 3:
 			#For declartive Statements
@@ -121,15 +123,16 @@ with open("code.txt") as f, open(".output1.txt", "w+") as out:
 				LC+=1
 				if line[0] in SYMBOL_TABLE[0]:
 					idx = SYMBOL_TABLE[0].index(line[0])
+					print("Replacing", SYMBOL_TABLE[1][idx], "with", LC)
 					SYMBOL_TABLE[1][idx] = LC
 				else:
 					SYMBOL_TABLE[0].append(line[0])
 					SYMBOL_TABLE[1].append(LC)
-				
+
 		if line[0] == 'ORIGIN':
 			LC = int(line[1]) - 1
 
 
-# print("\n\nSYMBOL_TABLE = ", SYMBOL_TABLE)
-# print("LITERAL_TABLE = ", LITERAL_TABLE)
-# print("LC = ", LC)
+print("\n\nSYMBOL_TABLE = ", SYMBOL_TABLE)
+print("LITERAL_TABLE = ", LITERAL_TABLE)
+print("LC = ", LC)
